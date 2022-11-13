@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "repository": "https://github.com/io-boxies/js-lib",
   "files": [
-    "dist/*"
+    "dist/**"
   ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
