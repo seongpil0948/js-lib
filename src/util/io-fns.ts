@@ -12,6 +12,8 @@
 //   Object.keys(obj).map((k) => s.includes(obj[k]));
 // }
 
+import { dateToJson } from "./date";
+
 export const uniqueArr = <T>(arr: T[]): T[] => [...new Set(arr)];
 export function uniqueFilter<T>(arr: T[]): T[] {
   // used when There are many Duplicate values
@@ -23,4 +25,18 @@ export function range(start: number, end: number) {
 export function choice<T>(choices: T[]): T {
   const index = Math.floor(Math.random() * choices.length);
   return choices[index];
+}
+
+export function commonToJson(c: any) {
+  const dateKeys: string[] = [];
+  Object.entries(c).forEach(([k, v]) => {
+    if (Object.prototype.toString.call(v) === "[object Date]") {
+      dateKeys.push(k);
+    }
+  });
+  const j = JSON.parse(JSON.stringify(c));
+  dateKeys.forEach((dk) => {
+    j[dk] = dateToJson(j[dk]);
+  });
+  return j;
 }

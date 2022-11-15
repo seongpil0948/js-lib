@@ -7,6 +7,9 @@ const TIME_FORMATS = Object.freeze({
   DAY: "yyyy-MM-dd",
   MIN: "yyyy-MM-dd HH:mm",
 });
+Date.prototype.toJSON = function () {
+  return this.toISOString();
+};
 
 export const formatDate = (t: Date, f: TIME_FORMATS = "DAY") =>
   format(t, TIME_FORMATS[f], { locale: ko });
@@ -14,6 +17,17 @@ export const getCurrDate = (f: TIME_FORMATS = "DAY") =>
   formatDate(new Date(), f);
 export const timeToDate = (t: any, f: TIME_FORMATS = "DAY") =>
   formatDate(new Date(t), f);
+
+export function dateToJson(data: string | Date | undefined): string {
+  if (!data) return getCurrDate();
+  else if (typeof data === "string") {
+    return data;
+  } else if (data instanceof Date) {
+    return data.toJSON();
+  } else {
+    throw new Error("not Matched condition in dateToJson of commonField  ");
+  }
+}
 
 export function dateToTimeStamp(d: Date | undefined): Timestamp {
   if (!d) {

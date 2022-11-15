@@ -7,7 +7,12 @@ import {
   doc,
   getDoc,
 } from "@firebase/firestore";
-import { getIoCollection, IoCollection, batchInQuery } from "../../firebase";
+import {
+  getIoCollection,
+  IoCollection,
+  batchInQuery,
+  insertById,
+} from "../../firebase";
 import { IoUser, UserDB, USER_PROVIDER, USER_ROLE } from "../domain";
 import { userFireConverter, userFromCredential } from "../util";
 
@@ -17,7 +22,7 @@ export const UserFB: UserDB = {
       userFireConverter
     );
     const snap = await getDocs(query(c, where("userInfo.role", "==", role)));
-    return _usersFromSnap(snap);
+    return usersFromSnap(snap);
   },
   getUserById: async function (uid: string) {
     const snapshot = await getDoc(
@@ -38,7 +43,7 @@ export const UserFB: UserDB = {
       c,
       "userInfo.userId"
     );
-    return snapshots.flatMap(_usersFromSnap);
+    return snapshots.flatMap(usersFromSnap);
   },
   ioSignUpCredential: async function (
     uc: UserCredential,
@@ -48,9 +53,18 @@ export const UserFB: UserDB = {
     const user = await userFromCredential(uc, name, role, USER_PROVIDER.KAKAO);
     return user;
   },
+  updateUser: async function (u: IoUser) {
+    await insertById<IoUser>(
+      u,
+      getIoCollection({ c: IoCollection.USER }),
+      u.userInfo.userId,
+      true,
+      userFireConverter
+    );
+  },
 };
 
-export function _usersFromSnap(snap: QuerySnapshot<IoUser | null>): IoUser[] {
+export function usersFromSnap(snap: QuerySnapshot<IoUser | null>): IoUser[] {
   const users: IoUser[] = [];
   console.log("users snap from cache " + snap.metadata.fromCache);
   snap.docs.forEach((d) => {

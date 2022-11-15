@@ -136,6 +136,7 @@ export interface UserDB {
     name: string,
     role: USER_ROLE
   ): Promise<IoUser>;
+  updateUser(u: IoUser): Promise<void>;
 }
 
 export { SHIP_METHOD, USER_ROLE, USER_PROVIDER, SALE_MANAGE };
