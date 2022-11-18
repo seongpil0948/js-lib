@@ -5,7 +5,7 @@ import {
   DocumentSnapshot,
   FirestoreDataConverter,
 } from "@firebase/firestore";
-import { loadDate } from "../../util";
+import { commonToJson, loadDate } from "../../util";
 import {
   FcmToken,
   IoUser,
@@ -93,7 +93,7 @@ export function userFromJson(data: { [x: string]: any }): IoUser | null {
 
 export const userFireConverter: FirestoreDataConverter<IoUser | null> = {
   toFirestore: (u: IoUser) => {
-    return JSON.parse(JSON.stringify(u));
+    return commonToJson(u);
   },
   fromFirestore: (
     snapshot: DocumentSnapshot<DocumentData>,

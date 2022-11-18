@@ -4,7 +4,7 @@ import {
   FirestoreDataConverter,
 } from "@firebase/firestore";
 import { CommonField } from "../common";
-import { loadDate } from "../util";
+import { commonToJson, loadDate } from "../util";
 import { IO_BANKS, PayHistoryCRT } from "./domain";
 
 export interface IoAccount {
@@ -64,7 +64,7 @@ export function payFromJson(data: { [x: string]: any }): IoPay | null {
 }
 export const payFireConverter: FirestoreDataConverter<IoPay | null> = {
   toFirestore: (pay: IoPay) => {
-    return JSON.parse(JSON.stringify(pay));
+    return commonToJson(pay);
   },
   fromFirestore: (
     snapshot: DocumentSnapshot<DocumentData>,
