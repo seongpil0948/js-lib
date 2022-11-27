@@ -12,8 +12,8 @@
 //   Object.keys(obj).map((k) => s.includes(obj[k]));
 // }
 
-import { dateToJson } from "./date";
-
+import { dateToJson, loadDate } from "./date";
+import { Timestamp } from "@firebase/firestore";
 export const uniqueArr = <T>(arr: T[]): T[] => [...new Set(arr)];
 export function uniqueFilter<T>(arr: T[]): T[] {
   // used when There are many Duplicate values
@@ -39,4 +39,13 @@ export function commonToJson(c: any) {
     j[dk] = dateToJson(j[dk]);
   });
   return j;
+}
+
+export function commonFromJson(data: { [k: string]: any }) {
+  Object.keys(data).forEach((k) => {
+    if (data[k] instanceof Timestamp) {
+      data[k] = loadDate(data[k]);
+    }
+  });
+  return data;
 }

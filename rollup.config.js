@@ -20,5 +20,6 @@ export default {
     "date-fns",
     "date-fns/locale",
     "@firebase/messaging",
+    "@editorjs/editorjs",
   ],
 };

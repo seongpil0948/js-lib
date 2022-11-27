@@ -2,7 +2,7 @@ import { UserCredential } from "@firebase/auth";
 import { FcmToken } from ".";
 import { Locate } from "../../locate";
 import { IoAccount } from "../../payment";
-
+import { OutputData } from "@editorjs/editorjs/types/data-formats";
 type USER_ROLE =
   | "SHOP"
   | "VENDOR"
@@ -122,6 +122,7 @@ export interface IoUser {
   workerInfo?: WorkerInfo;
   workState?: string;
   connectState?: string;
+  orderMemo?: OutputData;
 }
 export type UserFields = CompanyInfo &
   IoUserInfo &
