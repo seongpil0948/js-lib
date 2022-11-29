@@ -2,7 +2,7 @@ import typescript from "rollup-plugin-typescript2";
 
 // https://www.peterkimzz.com/rollupjs-using-plugin/
 export default {
-  input: ["src/index.ts"],
+  input: ["lib/index.ts"],
   output: [
     {
       dir: "dist",
