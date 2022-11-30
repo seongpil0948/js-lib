@@ -15,6 +15,7 @@ export default {
     "@firebase/firestore",
     "@firebase/storage",
     "@firebase/util",
+    "@firebase/auth",
     "@firebase/analytics",
     "@firebase/app",
     "date-fns",

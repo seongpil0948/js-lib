@@ -5,3 +5,4 @@ export * from "./locate";
 export * from "./payment";
 export * from "./util";
 export * from "./constants";
+export * from "./exception";

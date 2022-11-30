@@ -18,8 +18,11 @@
   },
   "author": "",
   "license": "ISC",
+  "peerDependencies": {
+    "firebase": "^9.14.0"
+  },
   "dependencies": {
-    "firebase": "^9.8.2"
+    "firebase": "^9.14.0"
   },
   "devDependencies": {
     "@editorjs/editorjs": "^2.25.0",

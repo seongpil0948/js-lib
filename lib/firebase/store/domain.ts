@@ -10,7 +10,8 @@ export type IoCollection =
   | "TOKENS"
   | "SHIPMENT"
   | "PICKUP_LOCATES"
-  | "CS_POST";
+  | "CS_POST"
+  | "TEST";
 
 export const IoCollection: { [key in IoCollection]: IoCollection } =
   Object.freeze({
@@ -26,6 +27,7 @@ export const IoCollection: { [key in IoCollection]: IoCollection } =
     SHIPMENT: "SHIPMENT",
     PICKUP_LOCATES: "PICKUP_LOCATES",
     CS_POST: "CS_POST",
+    TEST: "TEST",
   });
 
 export interface getCollectParam {

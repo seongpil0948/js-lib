@@ -4,7 +4,7 @@ import {
   collection,
   collectionGroup,
 } from "@firebase/firestore";
-import { iostore } from "./store";
+import { IoFireApp } from "../app";
 export function getIoCollection(p: getCollectParam): CollectionReference {
   let str: string;
   switch (p.c) {
@@ -44,10 +44,14 @@ export function getIoCollection(p: getCollectParam): CollectionReference {
     case IoCollection.CS_POST:
       str = `csPost`;
       break;
+    case IoCollection.TEST:
+      str = `test`;
+      break;
     default:
       throw Error(`IoCollection Enum Member ${p.c.toString()} is not Exist`);
   }
-  return collection(iostore, str);
+
+  return collection(IoFireApp.getInst().store, str);
 }
 export function getIoCollectionGroup(c: IoCollection) {
   let str: string;
@@ -58,5 +62,5 @@ export function getIoCollectionGroup(c: IoCollection) {
     default:
       throw Error(`IoCollection Enum Member ${c.toString()} is not Exist`);
   }
-  return collectionGroup(iostore, str);
+  return collectionGroup(IoFireApp.getInst().store, str);
 }

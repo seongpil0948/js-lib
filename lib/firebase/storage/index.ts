@@ -7,7 +7,6 @@ import {
 } from "@firebase/storage";
 import { uuidv4 } from "@firebase/util";
 import { FirebaseStorage, getStorage } from "@firebase/storage";
-import { fbApp } from "../app";
 export type STORAGE_SVC = "VENDOR_PRODUCT" | "USER";
 export const STORAGE_SVC: { [key in STORAGE_SVC]: STORAGE_SVC } = Object.freeze(
   {
@@ -16,12 +15,9 @@ export const STORAGE_SVC: { [key in STORAGE_SVC]: STORAGE_SVC } = Object.freeze(
   }
 );
 
-export const getIoStorage = () => getStorage(fbApp);
-export const ioStorage = getIoStorage();
-
-export function getUrlRef(url: string) {
+export function getUrlRef(storage: FirebaseStorage, url: string) {
   // https://firebase.google.com/docs/storage/web/download-files?hl=ko#create_a_reference
-  const refer = ref(ioStorage, url);
+  const refer = ref(storage, url);
   console.log("refer:", refer);
   return refer;
 }
@@ -30,17 +26,18 @@ function getUserPath(userId: string) {
 }
 
 export function getParentRef(p: {
+  storage: FirebaseStorage;
   svc: STORAGE_SVC;
   userId: string;
   parentId?: string;
 }) {
   if (p.svc === "USER") {
-    return ref(ioStorage, getUserPath(p.userId));
+    return ref(p.storage, getUserPath(p.userId));
   } else if (p.svc === "VENDOR_PRODUCT") {
     if (!p.parentId) throw new Error("parentId is required in getParentRef");
     // parentId: vendorProdId
     return ref(
-      ioStorage,
+      p.storage,
       `${getUserPath(p.userId)}/VENDOR_PRODUCT/${p.parentId}`
     );
   } else {
