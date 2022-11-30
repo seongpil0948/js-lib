@@ -13,6 +13,7 @@ import {
   USER_PROVIDER,
   USER_ROLE,
 } from "../domain";
+import { IoFireApp } from "../../firebase";
 
 export const getUserLocate = (u: IoUser) => {
   if (!u.companyInfo || u.companyInfo.locations.length < 1) return null;
@@ -45,7 +46,7 @@ export function availUncleAdvertise(u: IoUser) {
 }
 
 export async function getFcmToken() {
-  const messaging = getMessaging();
+  const messaging = getMessaging(IoFireApp.getInst().app);
   return getToken(messaging, {
     vapidKey:
       "BDATZH9Zt9gMTBQqOUpt2VMWb7wX2V8t0PeyO_UVCUf46kNkJ_smqT2nx31StrXKHVD_BRq5Bqhr2wsCCXQhLPw",

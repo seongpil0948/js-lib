@@ -17,7 +17,7 @@ export default {
     "@firebase/util",
     "@firebase/auth",
     "@firebase/analytics",
-    "@firebase/app",
+    "firebase/app",
     "date-fns",
     "date-fns/locale",
     "@firebase/messaging",
