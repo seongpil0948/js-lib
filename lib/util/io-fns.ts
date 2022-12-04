@@ -12,7 +12,7 @@
 //   Object.keys(obj).map((k) => s.includes(obj[k]));
 // }
 
-import { dateToJson, loadDate } from "./date";
+import { dateToTimeStamp, loadDate } from "./date";
 import { Timestamp } from "@firebase/firestore";
 export const uniqueArr = <T>(arr: T[]): T[] => [...new Set(arr)];
 export function uniqueFilter<T>(arr: T[]): T[] {
@@ -36,7 +36,7 @@ export function commonToJson(c: any) {
   });
   const j = JSON.parse(JSON.stringify(c));
   dateKeys.forEach((dk) => {
-    j[dk] = dateToJson(j[dk]);
+    j[dk] = dateToTimeStamp(c[dk]);
   });
   return j;
 }
