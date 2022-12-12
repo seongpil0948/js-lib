@@ -47,7 +47,7 @@ export class IoFireApp {
     this.app = this.getIoFirebaseApp();
     this.store = initializeFirestore(this.app, {});
     console.info("initialized IoFireApp", this);
-    enableIndexedDbPersistence(this.store);
+    enableIndexedDbPersistence(this.store, { forceOwnership: false });
   }
   private getIoFirebaseApp() {
     if (this.env === "io-dev") {
@@ -63,6 +63,7 @@ export class IoFireApp {
       if (!env) throw new NotInitializedIoFireApp();
       else IoFireApp.instance = new IoFireApp(env);
     } else if (env && IoFireApp.instance.env !== env) {
+      console.log("env: ", env);
       throw new EnvNotMatchedWithInstance(
         `param ${env} is not matched env(${IoFireApp.instance.env})`
       );

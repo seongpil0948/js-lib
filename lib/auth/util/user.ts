@@ -5,11 +5,11 @@ import {
   DocumentSnapshot,
   FirestoreDataConverter,
 } from "@firebase/firestore";
-import { commonFromJson, commonToJson, loadDate } from "../../util";
+import { commonFromJson, commonToJson } from "../../util";
 import {
-  FcmToken,
   IoUser,
   IoUserInfo,
+  UncleInfo,
   USER_PROVIDER,
   USER_ROLE,
 } from "../domain";
@@ -64,10 +64,14 @@ export async function getFcmToken() {
 }
 
 export function userFromJson(data: { [x: string]: any }): IoUser | null {
-  const userInfo: IoUserInfo = data.userInfo;
-  userInfo.createdAt = loadDate(userInfo.createdAt);
-  userInfo.updatedAt = loadDate(userInfo.updatedAt);
-
+  if (
+    data.userInfo &&
+    (data.userInfo.role as USER_ROLE) === "UNCLE" &&
+    !data.uncleInfo
+  ) {
+    data.uncleInfo = uncleInfoEmpty();
+  }
+  console.log("userFromJson: ", data);
   return commonFromJson(data) as IoUser;
 }
 
@@ -102,5 +106,16 @@ export async function userFromCredential(
     fcmTokens: token !== null ? [token] : [],
     passed: false,
   };
-  return { userInfo };
+  const data: IoUser = { userInfo };
+  if (role === "UNCLE") {
+    data.uncleInfo = uncleInfoEmpty();
+  }
+  return data;
 }
+
+export const uncleInfoEmpty = (): UncleInfo => ({
+  pickupLocates: [],
+  shipLocates: [],
+  amountBySize: {},
+  amountByWeight: {},
+});

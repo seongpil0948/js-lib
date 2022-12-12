@@ -7,6 +7,12 @@ import {
   DocumentSnapshot,
   FirestoreDataConverter,
 } from "@firebase/firestore";
+import {
+  getFunctions,
+  httpsCallable,
+  connectFunctionsEmulator,
+} from "firebase/functions";
+
 import { uuidv4 } from "@firebase/util";
 // import {IoFireApp, getIoCollection, commonToJson, FirestoreDataConverter, commonFromJson} from "@io-boxies/js-lib"
 import {
@@ -27,6 +33,7 @@ export function setupFire(el: HTMLButtonElement) {
     <div>
       <h3>Fire Zone</h3>
       <div class="card">
+        <button type="button" id="testCallableFunc">testCallableFunc</button>
         <button type="button" id="listenTestCollection">listen test collection</button>
         <button type="button" id="setTestCollection">set test collection</button>
         <button type="button" id="updateTestCollection">update test collection</button>
@@ -38,7 +45,19 @@ export function setupFire(el: HTMLButtonElement) {
     `;
     document.querySelector<HTMLDivElement>("#app")!.appendChild(fireZone);
 
-    // listen
+    (document.getElementById("testCallableFunc") as HTMLButtonElement).onclick =
+      async function () {
+        const inst = IoFireApp.getInst("io-dev");
+        const functions = getFunctions(inst.app, "asia-northeast3");
+        const funcName = "scheduledFirestoreExport";
+        connectFunctionsEmulator(functions, "localhost", 5001); // DEBUG
+        let func = httpsCallable(functions, funcName);
+        let result = await func();
+        console.log(`result of ${funcName}: ${result.data}`);
+        return result.data;
+      };
+
+    // >>> listen test collection >>>
     const testData: any[] = [];
     (
       document.getElementById("listenTestCollection") as HTMLButtonElement
@@ -76,7 +95,7 @@ export function setupFire(el: HTMLButtonElement) {
         el.innerHTML = html;
       });
     };
-    // set
+    // >>> set test collection >>>
     (
       document.getElementById("setTestCollection") as HTMLButtonElement
     ).onclick = async function () {
@@ -90,7 +109,7 @@ export function setupFire(el: HTMLButtonElement) {
       console.log("json:", j);
       await setDoc(doc(c, id), j);
     };
-    // update
+    // >>> update test collection >>>
     (
       document.getElementById("updateTestCollection") as HTMLButtonElement
     ).onclick = async function () {
