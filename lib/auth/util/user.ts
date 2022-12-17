@@ -71,7 +71,6 @@ export function userFromJson(data: { [x: string]: any }): IoUser | null {
   ) {
     data.uncleInfo = uncleInfoEmpty();
   }
-  console.log("userFromJson: ", data);
   return commonFromJson(data) as IoUser;
 }
 
