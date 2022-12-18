@@ -1,7 +1,7 @@
 {
   "name": "@io-boxies/js-lib",
   "type": "module",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "repository": "https://github.com/io-boxies/js-lib",
   "files": [
     "dist/**"
