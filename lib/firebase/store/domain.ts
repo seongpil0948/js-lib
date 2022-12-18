@@ -11,7 +11,10 @@ export type IoCollection =
   | "SHIPMENT"
   | "PICKUP_LOCATES"
   | "CS_POST"
-  | "TEST";
+  | "TEST"
+  | "VIRTUAL_VENDOR_PROD"
+  | "VIRTUAL_ORDER_PROD"
+  | "VIRTUAL_USER";
 
 export const IoCollection: { [key in IoCollection]: IoCollection } =
   Object.freeze({
@@ -28,6 +31,9 @@ export const IoCollection: { [key in IoCollection]: IoCollection } =
     PICKUP_LOCATES: "PICKUP_LOCATES",
     CS_POST: "CS_POST",
     TEST: "TEST",
+    VIRTUAL_VENDOR_PROD: "VIRTUAL_VENDOR_PROD",
+    VIRTUAL_ORDER_PROD: "VIRTUAL_ORDER_PROD",
+    VIRTUAL_USER: "VIRTUAL_USER",
   });
 
 export interface getCollectParam {

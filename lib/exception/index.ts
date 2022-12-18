@@ -14,3 +14,9 @@ export class NotInitializedIoFireApp extends IoBoxError {
     super("must use IoFireApp after initialized, and add env param for init");
   }
 }
+
+export class RequiredField extends IoBoxError {
+  constructor(funcName: string, field: string) {
+    super(`function ${funcName} required field: ${field}`);
+  }
+}
