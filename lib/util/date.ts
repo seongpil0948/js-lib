@@ -1,5 +1,5 @@
 import { Timestamp } from "@firebase/firestore";
-import { format, subDays, parseISO } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { ko } from "date-fns/locale";
 
 type TIME_FORMATS = "DAY" | "MIN";
@@ -26,11 +26,12 @@ export function loadDate(
 ): Date {
   if (!d) return new Date();
   else if (d instanceof Date) return d;
+  else if (d instanceof Timestamp) return d.toDate();
   else if (typeof d === "string") return parseISO(d);
   else if (typeof d === "number") return Timestamp.fromMillis(d).toDate();
   else if (d.seconds && d.nanoseconds)
     return new Timestamp(d.seconds, d.nanoseconds).toDate();
   else if (d.seconds && d.constructor.name === "ut")
     return new Timestamp(d.seconds + 60 * 60 * 15, d.nanoseconds).toDate();
-  else throw Error("Fail to load Date");
+  else return new Date();
 }
