@@ -1,4 +1,5 @@
 import { IoPay } from "./util";
+import { Firestore } from "@firebase/firestore";
 
 export type IO_BANKS =
   | "NH" // 농협
@@ -68,9 +69,13 @@ export const IO_BANKS: { [key in IO_BANKS]: IO_BANKS } = Object.freeze({
 });
 
 export interface PaymentDB {
-  getIoPayByUser(uid: string): Promise<IoPay>;
-  getIoPayByUserListen(uid: string, onSnap: (data: IoPay) => void): void;
-  getIoPaysListen(onSnap: (data: IoPay[]) => void): void;
+  getIoPayByUser(store: Firestore, uid: string): Promise<IoPay>;
+  getIoPayByUserListen(
+    store: Firestore,
+    uid: string,
+    onSnap: (data: IoPay) => void
+  ): void;
+  getIoPaysListen(store: Firestore, onSnap: (data: IoPay[]) => void): void;
 }
 
 export interface IoPayCRT {

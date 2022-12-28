@@ -1,4 +1,5 @@
 import { UserCredential } from "@firebase/auth";
+import { Firestore } from "@firebase/firestore";
 import { FcmToken } from ".";
 import { Locate } from "../../locate";
 import { IoAccount } from "../../payment";
@@ -129,15 +130,18 @@ export type UserFields = CompanyInfo &
   ShopOperInfo &
   VendorOperInfo;
 export interface UserDB {
-  getUserById(uid: string): Promise<IoUser | null | undefined>;
-  getUserByIds(uids: string[]): Promise<IoUser[]>;
-  getUsersByRole(role: USER_ROLE): Promise<IoUser[]>;
+  getUserById(
+    store: Firestore,
+    uid: string
+  ): Promise<IoUser | null | undefined>;
+  getUserByIds(store: Firestore, uids: string[]): Promise<IoUser[]>;
+  getUsersByRole(store: Firestore, role: USER_ROLE): Promise<IoUser[]>;
   ioSignUpCredential(
     uc: UserCredential,
     name: string,
     role: USER_ROLE
   ): Promise<IoUser>;
-  updateUser(u: IoUser): Promise<void>;
+  updateUser(store: Firestore, u: IoUser): Promise<void>;
 }
 
 export { SHIP_METHOD, USER_ROLE, USER_PROVIDER, SALE_MANAGE };

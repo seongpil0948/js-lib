@@ -6,6 +6,7 @@ import {
   where,
   doc,
   getDoc,
+  Firestore,
 } from "@firebase/firestore";
 import {
   getIoCollection,
@@ -17,25 +18,31 @@ import { IoUser, UserDB, USER_PROVIDER, USER_ROLE } from "../domain";
 import { userFireConverter, userFromCredential } from "../util";
 
 export const UserFB: UserDB = {
-  getUsersByRole: async function (role: USER_ROLE): Promise<IoUser[]> {
-    const c = getIoCollection({ c: IoCollection.USER }).withConverter(
+  getUsersByRole: async function (
+    store: Firestore,
+    role: USER_ROLE
+  ): Promise<IoUser[]> {
+    const c = getIoCollection(store, { c: IoCollection.USER }).withConverter(
       userFireConverter
     );
     const snap = await getDocs(query(c, where("userInfo.role", "==", role)));
     return usersFromSnap(snap);
   },
-  getUserById: async function (uid: string) {
+  getUserById: async function (store: Firestore, uid: string) {
     const snapshot = await getDoc(
-      doc(getIoCollection({ c: IoCollection.USER }), uid).withConverter(
+      doc(getIoCollection(store, { c: IoCollection.USER }), uid).withConverter(
         userFireConverter
       )
     );
     const u = snapshot.data();
     return u;
   },
-  getUserByIds: async function (uids: string[]): Promise<IoUser[]> {
+  getUserByIds: async function (
+    store: Firestore,
+    uids: string[]
+  ): Promise<IoUser[]> {
     if (uids.length < 1) return [];
-    const c = getIoCollection({ c: IoCollection.USER }).withConverter(
+    const c = getIoCollection(store, { c: IoCollection.USER }).withConverter(
       userFireConverter
     );
     const snapshots = await batchInQuery<IoUser | null>(
@@ -53,10 +60,10 @@ export const UserFB: UserDB = {
     const user = await userFromCredential(uc, name, role, USER_PROVIDER.KAKAO);
     return user;
   },
-  updateUser: async function (u: IoUser) {
+  updateUser: async function (store: Firestore, u: IoUser) {
     await insertById<IoUser>(
       u,
-      getIoCollection({ c: IoCollection.USER }),
+      getIoCollection(store, { c: IoCollection.USER }),
       u.userInfo.userId,
       true,
       userFireConverter

@@ -6,6 +6,7 @@ import {
   DocumentData,
   DocumentSnapshot,
   FirestoreDataConverter,
+  getFirestore,
 } from "@firebase/firestore";
 import {
   getFunctions,
@@ -62,7 +63,9 @@ export function setupFire(el: HTMLButtonElement) {
     (
       document.getElementById("listenTestCollection") as HTMLButtonElement
     ).onclick = function () {
-      const c = getIoCollection({ c: "TEST" }).withConverter(fireConverter());
+      const c = getIoCollection(getFirestore(), { c: "TEST" }).withConverter(
+        fireConverter()
+      );
       onSnapshot(c, (snapshot) => {
         snapshot.docChanges().forEach((c) => {
           const target = c.doc.data();
@@ -99,7 +102,7 @@ export function setupFire(el: HTMLButtonElement) {
     (
       document.getElementById("setTestCollection") as HTMLButtonElement
     ).onclick = async function () {
-      const c = getIoCollection({ c: "TEST" });
+      const c = getIoCollection(getFirestore(), { c: "TEST" });
       const id = uuidv4();
       const j = commonToJson({
         id,
@@ -113,7 +116,7 @@ export function setupFire(el: HTMLButtonElement) {
     (
       document.getElementById("updateTestCollection") as HTMLButtonElement
     ).onclick = async function () {
-      const c = getIoCollection({ c: "TEST" });
+      const c = getIoCollection(getFirestore(), { c: "TEST" });
       const j = { createdAt: dateToTimeStamp(new Date()) };
       console.log("testData:", testData[0]);
       console.log("json:", j);
