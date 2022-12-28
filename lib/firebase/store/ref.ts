@@ -3,11 +3,14 @@ import {
   CollectionReference,
   collection,
   collectionGroup,
+  Firestore,
 } from "@firebase/firestore";
-import { IoFireApp } from "../app";
 import { RequiredField } from "../../exception";
 
-export function getIoCollection(p: getCollectParam): CollectionReference {
+export function getIoCollection(
+  store: Firestore,
+  p: getCollectParam
+): CollectionReference {
   let str: string;
   switch (p.c) {
     case IoCollection.USER:
@@ -70,10 +73,10 @@ export function getIoCollection(p: getCollectParam): CollectionReference {
       throw Error(`IoCollection Enum Member ${p.c.toString()} is not Exist`);
   }
 
-  return collection(IoFireApp.getInst().store, str);
+  return collection(store, str);
 }
 
-export function getIoCollectionGroup(c: IoCollection) {
+export function getIoCollectionGroup(store: Firestore, c: IoCollection) {
   let str: string;
   switch (c) {
     case IoCollection.ORDER_PROD:
@@ -82,5 +85,5 @@ export function getIoCollectionGroup(c: IoCollection) {
     default:
       throw Error(`IoCollection Enum Member ${c.toString()} is not Exist`);
   }
-  return collectionGroup(IoFireApp.getInst().store, str);
+  return collectionGroup(store, str);
 }

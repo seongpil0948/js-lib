@@ -1,20 +1,10 @@
 import { initializeApp, FirebaseApp } from "firebase/app";
 import {
-  Firestore,
-  enableIndexedDbPersistence,
-  initializeFirestore,
-  // CACHE_SIZE_UNLIMITED,
-} from "@firebase/firestore";
-import {
   EnvNotMatchedWithInstance,
   IoNotSupportedEnv,
   NotInitializedIoFireApp,
 } from "../exception";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseProdConfig = {
   apiKey: "AIzaSyCZZWgDchBhOt_FegFemyofULLHzTLVjA4",
   authDomain: "io-box.firebaseapp.com",
@@ -39,15 +29,13 @@ export class IoFireApp {
   private static instance: IoFireApp;
   public env: IO_ENV;
   public app: FirebaseApp;
-  public store: Firestore;
 
   // new 클래스 구문 사용 제한을 목적으로 constructor() 함수 앞에 private 접근 제어자 추가
   private constructor(env: IO_ENV) {
     this.env = env;
     this.app = this.getIoFirebaseApp();
-    this.store = initializeFirestore(this.app, {});
-    console.info("initialized IoFireApp", this);
-    enableIndexedDbPersistence(this.store, { forceOwnership: false });
+    // this.store = initializeFirestore(this.app, {});
+    // enableIndexedDbPersistence(this.store, { forceOwnership: false });
   }
   private getIoFirebaseApp() {
     if (this.env === "io-dev") {
@@ -71,6 +59,3 @@ export class IoFireApp {
     return IoFireApp.instance;
   }
 }
-
-// export const analytics = getAnalytics(fbApp);
-// FIXME: iostore;
