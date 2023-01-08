@@ -46,10 +46,11 @@ export const UserFB: UserDB = {
         where("userInfo.userId", "==", uid)
       )
     );
-    querySnapshot.forEach((doc) => {
+    for (let i = 0; i < querySnapshot.docs.length; i++) {
+      const doc = querySnapshot.docs[i];
       const u = doc.data();
       if (u) return u;
-    });
+    }
     return null;
   },
   getUserByIds: async function (
