@@ -29,13 +29,28 @@ export const UserFB: UserDB = {
     return usersFromSnap(snap);
   },
   getUserById: async function (store: Firestore, uid: string) {
-    const snapshot = await getDoc(
+    let snapshot = await getDoc(
       doc(getIoCollection(store, { c: IoCollection.USER }), uid).withConverter(
         userFireConverter
       )
     );
-    const u = snapshot.data();
-    return u;
+    if (snapshot.exists()) {
+      const u = snapshot.data();
+      return u;
+    }
+    const querySnapshot = await getDocs(
+      query(
+        getIoCollection(store, { c: IoCollection.USER }).withConverter(
+          userFireConverter
+        ),
+        where("userInfo.userId", "==", uid)
+      )
+    );
+    querySnapshot.forEach((doc) => {
+      const u = doc.data();
+      if (u) return u;
+    });
+    return null;
   },
   getUserByIds: async function (
     store: Firestore,
