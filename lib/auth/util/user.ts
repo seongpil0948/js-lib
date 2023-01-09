@@ -5,7 +5,12 @@ import {
   DocumentSnapshot,
   FirestoreDataConverter,
 } from "@firebase/firestore";
-import { commonFromJson, commonToJson } from "../../util";
+import {
+  commonFromJson,
+  commonToJson,
+  dateToTimeStamp,
+  loadDate,
+} from "../../util";
 import {
   IoUser,
   IoUserInfo,
@@ -71,12 +76,17 @@ export function userFromJson(data: { [x: string]: any }): IoUser | null {
   ) {
     data.uncleInfo = uncleInfoEmpty();
   }
+  data.userInfo.createdAt = loadDate(data.userInfo.createdAt);
+  data.userInfo.updatedAt = loadDate(data.userInfo.updatedAt);
   return commonFromJson(data) as IoUser;
 }
 
 export const userFireConverter: FirestoreDataConverter<IoUser | null> = {
   toFirestore: (u: IoUser) => {
-    return commonToJson(u);
+    const j = commonToJson(u);
+    j.userInfo.createdAt = dateToTimeStamp(j.userInfo.createdAt);
+    j.userInfo.updatedAt = dateToTimeStamp(j.userInfo.updatedAt);
+    return j;
   },
   fromFirestore: (
     snapshot: DocumentSnapshot<DocumentData>,
@@ -104,6 +114,8 @@ export async function userFromCredential(
     role: role,
     fcmTokens: token !== null ? [token] : [],
     passed: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
   const data: IoUser = { userInfo };
   if (role === "UNCLE") {

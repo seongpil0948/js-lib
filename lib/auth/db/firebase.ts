@@ -77,6 +77,7 @@ export const UserFB: UserDB = {
     return user;
   },
   updateUser: async function (store: Firestore, u: IoUser) {
+    u.userInfo.updatedAt = new Date();
     await insertById<IoUser>(
       u,
       getIoCollection(store, { c: IoCollection.USER }),
