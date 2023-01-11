@@ -16,10 +16,11 @@ export const timeToDate = (t: any, f: TIME_FORMATS = "DAY") =>
   formatDate(new Date(t), f);
 
 export function dateToTimeStamp(d: Date | undefined): Timestamp {
+  if (!(d instanceof Date)) {
+    d = loadDate(d);
+  }
   if (!d) {
     d = new Date();
-  } else if (!(d instanceof Date)) {
-    d = loadDate(d);
   }
   return Timestamp.fromDate(d);
 }
