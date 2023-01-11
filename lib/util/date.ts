@@ -18,6 +18,8 @@ export const timeToDate = (t: any, f: TIME_FORMATS = "DAY") =>
 export function dateToTimeStamp(d: Date | undefined): Timestamp {
   if (!d) {
     d = new Date();
+  } else if (!(d instanceof Date)) {
+    d = loadDate(d);
   }
   return Timestamp.fromDate(d);
 }
