@@ -5,6 +5,8 @@ import {
   getDoc,
   setDoc,
   QuerySnapshot,
+  Query,
+  DocumentData,
   getDocs,
   query,
   where,
@@ -33,7 +35,7 @@ export async function insertById<T>(
 
 export async function batchInQuery<T>(
   ids: string[] | number[],
-  c: CollectionReference<any>,
+  c: CollectionReference<any> | Query<DocumentData>,
   field: string
 ) {
   if (!ids || !ids.length) return [];

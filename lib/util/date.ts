@@ -22,7 +22,10 @@ export function dateToTimeStamp(d: Date | undefined): Timestamp {
   if (!d) {
     d = new Date();
   }
-  return Timestamp.fromDate(d);
+  if (typeof d["getTime"] === "function") {
+    return Timestamp.fromDate(d);
+  }
+  return Timestamp.now();
 }
 export function loadDate(
   d: Date | { [x: string]: number } | string | undefined
